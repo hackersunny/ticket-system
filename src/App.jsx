@@ -1,74 +1,15 @@
-// import { useState } from "react";
-// import Navbar from "./components/Navbar";
-// import StatsSection from "./components/StatsSection";
-// import TicketsSection from "./components/TicketsSection";
-// import { ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-
-// export default function App() {
-//   const [tickets, setTickets] = useState([
-//     {
-//       id: 1,
-//       title: "Login Issues - Can't Access Account",
-//       description: "User unable to login after password reset.",
-//       priority: "high",
-//       status: "open",
-//       user: "John Smith",
-//       date: "1/15/2024",
-//     },
-//     {
-//       id: 2,
-//       title: "Payment Failed - Card Declined",
-//       description: "Visa card keeps failing despite sufficient balance.",
-//       priority: "medium",
-//       status: "in-progress",
-//       user: "Sarah Johnson",
-//       date: "1/16/2024",
-//     },
-//   ]);
-
-//   const updateStatus = (id, newStatus) => {
-//     setTickets(prev =>
-//       prev.map(ticket =>
-//         ticket.id === id ? { ...ticket, status: newStatus } : ticket
-//       )
-//     );
-//   };
-
-//   const inProgressCount = tickets.filter(t => t.status === "in-progress").length;
-//   const resolvedCount = tickets.filter(t => t.status === "resolved").length;
-
-//   return (
-//     <>
-//       <Navbar />
-
-//       <div className="bg-base-200 py-10">
-//         <StatsSection 
-//           inProgress={inProgressCount}
-//           resolved={resolvedCount}
-//         />
-//       </div>
-
-//       <TicketsSection 
-//         tickets={tickets}
-//         updateStatus={updateStatus}
-//       />
-
-//       <ToastContainer position="top-right" autoClose={3000} theme="colored" />
-//     </>
-//   );
-// }
 import { useState } from "react";
 import Navbar from "./Components/Navbar";
 import StatsSection from "./Components/StatsSection";
 import TicketsSection from "./Components/TicketsSection";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import Footer from "./Components/Footer";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function App() {
-
-  // 12 Sample Tickets (JSON Data)
-  const [tickets] = useState([
+const [tickets, setTickets] = useState([
+  // 10 Sample Tickets (JSON Data)
+ 
     {
       id: 1,
       title: "Login Issue",
@@ -121,7 +62,40 @@ export default function App() {
       customer: "Liam Thomas",
       priority: "High",
       status: "open",
+      createdAt: "2024-01-21",
+    },
+        {
+      id: 7,
+      title: "M365 License Issue",
+      description: "Subscription not canceling.",
+      customer: "Thomas",
+      priority: "High",
+      status: "open",
       createdAt: "2024-01-22",
+    },    {
+      id: 8,
+      title: "NMS Issue",
+      description: "Nms is not providing logs",
+      customer: "Randy",
+      priority: "High",
+      status: "open",
+      createdAt: "2024-01-23",
+    },    {
+      id: 9,
+      title: "Bigdata server Issue",
+      description: "Server showing multiple error",
+      customer: "Aaron",
+      priority: "High",
+      status: "open",
+      createdAt: "2024-01-24",
+    },    {
+      id: 10,
+      title: "Bigdata data speed Issue",
+      description: "Data processing speed is slow",
+      customer: "Philip",
+      priority: "High",
+      status: "open",
+      createdAt: "2024-01-25",
     },
   ]);
 
@@ -136,20 +110,29 @@ export default function App() {
   };
 
   const handleComplete = (ticket) => {
-    setInProgress(inProgress.filter(t => t.id !== ticket.id));
-    setResolved([...resolved, ticket]);
-    alert("Task Completed!");
+    // Remove from in-progress
+    setInProgress(inProgress.filter((t) => t.id !== ticket.id));
+
+    // Add to resolved
+    setResolved([...resolved, { ...ticket, status: "resolved" }]);
+
+    // IMPORTANT: Remove from main tickets list
+    setTickets((prev) => prev.filter((t) => t.id !== ticket.id));
+
+    toast.success("Ticket marked as Resolved!");
   };
 
   return (
     <>
       <Navbar />
 
-      <div className="bg-base-200 py-10">
-        <StatsSection
-          inProgress={inProgress.length}
-          resolved={resolved.length}
-        />
+      <div className="bg-linear-to-r from-primary to-secondary py-12 text-white">
+        <div className="container mx-auto px-4">
+          <StatsSection
+            inProgress={inProgress.length}
+            resolved={resolved.length}
+          />
+        </div>
       </div>
 
       <TicketsSection
@@ -159,7 +142,19 @@ export default function App() {
         handleComplete={handleComplete}
       />
 
-      <ToastContainer />
+      <Footer />
+      <ToastContainer
+  position="top-right"
+  autoClose={4000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="colored"
+/>
     </>
   );
 }

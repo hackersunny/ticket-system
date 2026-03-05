@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-
 export default function Navbar() {
   const handleNewTicket = () => {
     toast.success("Redirecting to New Ticket page 🚀");
@@ -12,7 +11,7 @@ export default function Navbar() {
 
           {/* Logo */}
           <div className="text-xl font-bold">
-            <span className="text-primary">CS</span> — Ticket System
+            <span className="text-primary">CS</span> Ticket System
           </div>
 
           {/* Menu */}
